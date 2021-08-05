@@ -2,7 +2,7 @@
 import socket
 import select
 import sys
-import  _thread 
+from  _thread import *
 
 
 server = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
@@ -28,44 +28,37 @@ list_of_clients = []
 def clientthread(conn, addr):
 
 	# sends a message to the client whose user object is conn
-	conn.send("Welcome to this chatroom!")
+	conn.send(b'Welcome to this chatroom!')
 
 	while True:
-			try:
-				message = conn.recv(2048)
-				if message:
+            try:
+                message = conn.recv(2048).decode()
 
-					"""prints the message and address of the
-					user who just sent the message on the server
-					terminal"""
-					print ("<" + addr[0] + "> " + message)
-
-					# Calls broadcast function to send message to all
-					message_to_send = "<" + addr[0] + "> " + message
-					broadcast(message_to_send, conn)
-
-				else:
-					"""message may have no content if the connection
-					is broken, in this case we remove the connection"""
-					remove(conn)
-
-			except:
-				continue
+                if message:
+                    print("este es addr[0]" + str(addr[0]))
+                    print("<" + str(addr[0]) + "> " + message)
+                    
+                    # Calls broadcast function to send message to all
+                    message_to_send = "<" + str(addr[0]) + "> " + message
+                    broadcast(message_to_send, conn)
+                else:
+                    remove(conn)
+            except:
+                continue
 
 """Using the below function, we broadcast the message to all
 clients who's object is not the same as the one sending
 the message """
 def broadcast(message, connection):
-	for clients in list_of_clients:
-		if clients!=connection:
-			try:
-				clients.send(message)
-			except:
-				clients.close()
-
-				# if the link is broken, we remove the client
-				remove(clients)
-
+    for clients in list_of_clients:
+        print(clients)
+        if clients!=connection:
+            try:
+                clients.send(message.encode())
+            except:
+                clients.close()
+                # if the link is broken, we remove the client
+                remove(clients)
 """The following function simply removes the object
 from the list that was created at the beginning of
 the program"""

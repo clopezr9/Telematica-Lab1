@@ -2,7 +2,7 @@
 import socket
 import select
 import sys
-from thread import *
+import  _thread 
 
 
 server = socket.socket(socket.AF_INET, socket.SOCK_STREAM)

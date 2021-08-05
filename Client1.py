@@ -1,9 +1,9 @@
-# Python program to implement client side of chat room.
 import socket
 import select
 import sys
 
 server = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+
 if len(sys.argv) != 3:
 	print ("Correct usage: script, IP address, port number")
 	exit()
@@ -12,8 +12,6 @@ Port = int(sys.argv[2])
 server.connect((IP_address, Port))
 
 while True:
-
-	# maintains a list of possible input streams
 	sockets_list = [sys.stdin, server]
 	read_sockets,write_socket, error_socket = select.select(sockets_list,[],[])
 
